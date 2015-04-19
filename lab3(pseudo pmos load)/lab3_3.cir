@@ -1,0 +1,43 @@
+
+*  inverter with pseudo NMOS load
+*tranfer fun for varing W of driver nmos
+
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+m0 vd 0 out 5 CMOSP l=1u w=1u  *LOAD 
+m1 out in 0 0 CMOSN l=1u w=1u	 *Driver
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 
+
+.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach wid 1u 2u 4u
+alter m1 w = $wid
+run 
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot dc$iter
+*plot out
+end
+.endc
+
+.control
+let x= dc1.out
+let y= dc2.out
+let z= dc3.out
+plot x,y,z
+end
+.endc
+
+
+

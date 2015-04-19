@@ -1,0 +1,23 @@
+* SPICE3 file created from nand.ext - technology: scmos
+
+*.option scale=1u
+
+M1000 vdd a out vdd cmosp w=11u l=2u
++ ad=132p pd=68u as=132p ps=68u 
+M1001 out b vdd vdd cmosp w=11u l=2u
++ ad=0 pd=0 as=0 ps=0 
+M1002 vdd c out vdd cmosp w=11u l=2u
++ ad=0 pd=0 as=0 ps=0 
+M1003 a_n6_n5# a vss 0 cmosn w=4u l=2u
++ ad=28p pd=22u as=20p ps=18u 
+M1004 s2d1n b a_n6_n5# 0 cmosn w=4u l=2u
++ ad=28p pd=22u as=0 ps=0 
+M1005 out c s2d1n 0 cmosn w=4 l=2
++ ad=20p pd=18u as=0 ps=0 
+C0 out vdd 2.1fF
+C1 vss 0 12.8fF
+C2 out 0 4.5fF
+C3 c 0 6.3fF
+C4 b 0 6.3fF
+C5 a 0 6.0fF
+C6 vdd 0 4.9fF

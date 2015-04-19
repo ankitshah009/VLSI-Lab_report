@@ -1,0 +1,1698 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{caption}  
+\usepackage{float}
+\usepackage{sectsty}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{amsfonts}
+\usepackage{bookmark}
+\setcounter{secnumdepth}{0}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Java,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true
+  tabsize=3
+}
+
+%\titleclass{\subsubsubsection}{straight}[\subsection]
+
+\sectionfont{\fontsize{14}{15}\selectfont}
+%\usepackage[nottoc]{tocbibind}
+\floatstyle{boxed}
+\usepackage{graphics,graphicx}
+\textheight=247mm
+\textwidth=180mm
+\topmargin=-7mm
+\oddsidemargin=-10mm
+\evensidemargin=-10mm
+\parindent 10pt
+\usepackage{pgf}
+\usepackage{pgfpages}
+
+\pgfpagesdeclarelayout{boxed}
+{
+  \edef\pgfpageoptionborder{0pt}
+}
+{
+  \pgfpagesphysicalpageoptions
+  {%
+    logical pages=1,%
+  }
+  \pgfpageslogicalpageoptions{1}
+  {
+    border code=\pgfsetlinewidth{2pt}\pgfstroke,%
+    border shrink=\pgfpageoptionborder,%
+    resized width=.95\pgfphysicalwidth,%
+    resized height=.95\pgfphysicalheight,%
+    center=\pgfpoint{.5\pgfphysicalwidth}{.5\pgfphysicalheight}%
+  }%
+}
+
+\pgfpagesuselayout{boxed}
+\begin{document}
+%\pagestyle{plain}
+\pagenumbering{arabic}
+ %\renewcommand\thesection{\thechapter.\arabic{section}}
+ 
+\parskip = \baselineskip 
+\begin{center}
+{\underline{\LARGE{\bf
+{VLSI DESIGN LAB}
+}}}
+\bigskip
+\bigskip
+\bigskip
+\\
+{\Large{Report Submitted in partial fullfilment of course\\ on VLSI Design Lab (EC364)}
+\\
+\bigskip
+\bigskip
+\bigskip
+Under the guidance of\\
+Dr.Ramesh Kini\\
+Mr.Kiran Kumar Lad
+
+\bigskip
+\bigskip
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=1.0]{images-1.jpeg}
+\end{figure}
+
+\bigskip
+\vspace{10pt}
+Submitted by:\\
+Shah Ankit Parag 11EC86 \\Krunal Sonawale 11EC93
+\\
+\vspace{118pt}
+Department Of Electronics \& Communication Engineering 
+    \\National Institute Of Technology Karnataka, Surathkal 
+      \\Srinivasnagar 575025 Karnataka India 
+
+\vspace{5pt}
+April 2014 }
+\end{center}
+\clearpage
+\tableofcontents
+
+\clearpage
+\centerline{\bf
+%% ENTER NAME OF PI BELOW THIS LINE
+{MODULE-1 REPORT : CIRCUIT SIMULATION WITH NGSPICE}}
+
+\bigskip
+
+\begin{center}
+%LAB1
+\section{Lab 1:NMOS input, output characteristics with parametric sweeps}
+%\addcontentsline{toc}{Lab 1: MOSFET input, output characteristics with parametric sweeps}
+{\bf{Objective:}} 
+Study the input and output characteristic of NMOS transistor. Effect of length,width,VTO,VSB,lambda, and temperature on the behavior of transistor. 
+\vspace{5pt}
+
+\begin{figure}[!h]
+\centering
+\includegraphics[scale=1.0]{nmos1.jpg}
+\end{figure}
+\end{center}
+\\ \textbf{Parameters:}  
+\\ \textbf{Voh :} Maximum output voltage when the output level is logic "1" \\ \textbf{Vol :} Minimum output voltage when the output level is logic "0"  
+\\ \textbf{Vil :} Maximum input voltage which can be interpreted as logic "0"  
+\\ \textbf{Vih :} Minimum input voltage which can be interpreted as logic "1"  
+\\ \textbf{Rise Time:} Time taken for output voltage to change from low to high upon change in input. 
+\\ \textbf{Fall Time:} Time taken for output voltage to change from high to low upon change in input.  
+\\ \textbf{Noise Margin:}  NMl = Vil - Vol  NMh = Voh - Vih
+\\ \textbf{Propagation Delay:} Time it takes for the output signal voltage to switch after the input signal voltage has been applied.  
+\\ \textbf{Vm:} Point on the transfer characteristics curve where Vin= Vout. 
+\begin{center}
+\subsection{Varying Lambda}
+\bf{==============CODE FOR VARYING LAMBDA==============}
+\vspace{5pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}
+m1 d g 0 0 my_nmos l = .5u w = 0.5u
+
+*sources
+v_dd d 0 dc 5
+v_gg g 0 dc 3
+
+.dc v_dd 0 5 0.1 v_gg 0 3 1
+
+*response for various lambda 
+
+.control
+foreach lmda .01 .05 .09
+altermod m1 LAMBDA=$lmda
+run
+end 
+.endc
+\end{lstlisting}
+\clearpage
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.34]{lambda1a.png}
+\caption[Short]{Id vs Vdd}
+\end{figure}
+
+\begin{lstlisting}
+.control	
+foreach iter 1 2 3
+setplot dc$iter
+plot -v_dd#branch
+end
+.endc
+.end
+
+\end{lstlisting}
+
+
+\vspace{10pt}
+
+Reason : The Id vs Vdd curve is at first linear then becomes varies slowly in saturation region 
+due to channel length modulation which should be otherwise constant. 
+
+\newpage
+\bf{=========CODE FOR VARYING TEMPERATURE===========}
+\vspace{5pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}
+
+.include /home/Ankit/Desktop/11ec86-93/t14y_tsmc_025_level1.txt
+m0 out in Vss 0 RITSUBN1 TEMP=27
+
+*sources
+Vgng Vss 0 dc 0
+vdd out 0 dc 5
+Vin in 0  dc  5
+
+.dc Vin 0 5 .1
+.control
+foreach t1 27 50 100
+alter m0 TEMP =$t1
+run
+end 
+.endc
+
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{temp_vary_pic.png}
+\caption[Short]{Temperature Variation}
+\end{figure}
+\textit{Conclusion :}  In the above figure for VI characteristics, as the value of temperature increases, the current decreases. Hence, the current is inversely proportional to the temperature.
+\\
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{temp_vary_zoomed_pic2.png}
+
+\caption[Short]{Temperature Variation2}
+\end{figure}
+
+\bf{============CODE FOR VARYING LENGTH=============}
+\vspace{5pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}
+*nmos characteristics varing length
+
+*include model files
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level1.txt
+
+*netlist
+m1 drain gate 0 0 RITSUBN1 l=3u w=0.5u
+
+*define the sources
+vdd drain 0 dc 5
+vgg gate 0 dc 5
+.dc vdd 0 5 0.1 vgg 0 5 1
+
+*Computing the response for various width('len' variable)
+.control
+foreach len 1.5e-6 6e-6 3e-5
+alter m1 l = $len
+run 
+end
+.endc
+
+*plotting the output for various length
+.control
+foreach iter 1 2 3
+setplot dc$iter
+plot -vdd#branch
+end
+.endc
+
+
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{vary_len_1_5.png}
+
+\caption[Short]{For Length 1.5u}
+\end{figure}
+\\
+\textit{Conclusion:}  In the above figure for the VI characteristics. With increase in the value of L, the drain current decreases as shown. 
+\\
+
+\newpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{vary_len_6.png}
+
+\caption[Short]{For Length 6u}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{vary_len_30.png}
+
+\caption[Short]{For Length 30u}
+\end{figure}
+\newpage
+\bf{============CODE FOR VARYING VTO=============}
+\vspace{5pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level1.txt
+
+.model my_nmos nmos LEVEL=1 VTO=.03
+m0 out in Vss 0 my_nmos
+
+*sources
+Vgnd Vss 0 dc 0
+vdd out 0 dc 5
+
+*input_source
+Vin in 0 dc 5
+.dc Vin 0 5 .1
+
+.control
+foreach res 0.5 1 2
+altermod m0 VTO= $res
+
+run
+end
+.endc
+
+.control
+foreach iter 1 2 3
+setplot dc$iter
+plot -vdd#branch
+end
+.endc
+\end{lstlisting}
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{vary_VTO.png}
+
+\caption[Short]{For Varying VTO}
+\end{figure}
+\\
+\textit{Conclusion :}  In the above figure for VI characteristics, As the value of  VTo increases, the current decreases. Hence, the current is inversely proportional to VTo. 
+\\
+\bf{============CODE FOR VARYING VSB=============}
+\vspace{5pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+m1 drn gate s 0 cmosn l=1u w=.5u
+
+vdd drn 0 5
+vin gate 0 5
+vss s 0 0
+
+.dc  vin 0 6 .1 vss 0 3 1
+.control
+run 
+plot -vdd#branch
+.end
+
+\end{lstlisting}
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{VSB_vary.png}
+
+\caption[Short]{For varying VSB}
+\end{figure}
+
+
+\bf{============CODE FOR VARYING WIDTH=============}
+\vspace{5pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{lstlisting}
+*nmos characteristics
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level1.txt
+
+*netlist
+m1 drain gate 0 0 RITSUBN1 l=3u w=0.5u
+
+*define the sources
+vdd drain 0 dc 5
+vgg gate 0 dc 5
+.dc vdd 0 5 0.1 vgg 0 5 1
+
+*Computing the response for various width
+.control
+foreach wid 1e-6 3e-6 5e-6
+alter m1 w = $wid
+run 
+end
+.endc
+
+*plotting the output for various width
+.control
+foreach iter 1 2 3
+setplot dc$iter
+plot -vdd#branch
+end
+.endc
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{width_1a.png}
+\caption[Short]{For varying Width}
+\end{figure}
+
+\textit{Conclusion:}  In the above figure for the VI characteristics. With increase in the value of W, the drain current increases as shown. 
+\\
+
+\newpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{Width_1c.png}
+\caption[Short]{For varying Width}
+\end{figure}
+  
+\\
+\textit{Conclusion:} As L increases, $I_d$ decreases. As W increases ,$I_d$ increases. As $V_{To}$ increases, $I_d$ decreases. As ? increases, $I_d$ increases • As VSB increases, $I_d$ decreases ( As VT increases) • As temperature increases, $I_d$ decreases 
+\\
+%LAB2
+\clearpage
+\textbf{Parameters:}  
+\\ \textbf{Voh :} Maximum output voltage when the output level is logic "1" \\ \textbf{Vol :} Minimum output voltage when the output level is logic "0"  
+\\ \textbf{Vil :} Maximum input voltage which can be interpreted as logic "0"  
+\\ \textbf{Vih :} Minimum input voltage which can be interpreted as logic "1"  
+\\ \textbf{Rise Time:} Time taken for output voltage to change from low to high upon change in input. 
+\\ \textbf{Fall Time:} Time taken for output voltage to change from high to low upon change in input.  
+\\ \textbf{Noise Margin:}  NMl = Vil - Vol  NMh = Voh - Vih
+\\ \textbf{Propagation Delay:} Time it takes for the output signal voltage to switch after the input signal voltage has been applied.  
+\\ \textbf{Vm:} Point on the transfer characteristics curve where Vin= Vout. 
+
+
+
+
+\section{Lab 2: Study of MOS inverter with passive resistive load}
+\bigskip
+\centerline
+{\bf{Objective:}} 
+Study the transfer function,Noise margin, effect on risetime, falltime ,propagation
+delay, power and energy consumed of a MOS Inverter for various L, W, Load
+Capacitance and rise/fall time of input.\\
+\vspace{5pt}
+\bf{Circuit Diagram}\\
+\vspace{2pt}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{nmos_inverter_with_resistive_load.jpg}
+\caption[Short]{NMOS inverter with resistive load}
+\end{figure}
+
+
+\bf{=================Code For Varying Resistive=================}
+\vspace{5pt}
+\begin{lstlisting}
+ 
+*nmos characteristics
+
+*include model files
+.include /home/vlsilab/UG_students_2014/11ec8611ec93/t14y_tsmc_025_level3.txt
+*netlist
+m1 out in 0 0 CMOSN l=1u w=0.5u
+
+* Input voltage source
+Vdd vdd 0 5
+r0 vdd out 100
+V_in in 0 dc 2.5 pulse(0 5 0 1n 1n 2n 4n)
+*DC voltage source
+.dc 0 5 0.000004
+.tran 1n 4n
+
+*Computing the response for various resistiv_load
+.control
+foreach res 100 1k 100k
+alter r0 = $res
+run 
+end
+.endc
+
+*plotting the output for various width
+.control
+foreach iter 1 2 3
+setplot dc$iter
+plot in out
+plot -Vdd#branch
+setplot tran$iter
+plot in out
+plot -Vdd#branch
+end
+.endc
+.control 
+set filetype=ascii
+write output_alter_varying_res.txt
+.endc
+.end
+
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_current_dueto_varingR.png}
+\caption[Short]{For Current due to varying Resistance}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_DCeffect_on_current_dueto_WbyL_vary.png}
+\caption[Short]{For Current due to W/L ratio variation}
+\end{figure}
+
+
+\bf{====Resistive load Inverter DC transfer function====}
+\vspace{5pt}
+\begin{lstlisting}
+* nmos inverter resistiv_load DC transfer function only
+
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+r1 vd out 0.1k
+m1 out in 0 0 CMOSN l=1u w=1u
+
+*sources
+vdd vd 0 dc 3.3 
+vin in 0 dc 3.3
+
+.dc vin 0 6 .01
+
+* for transfer fun pic
+.control
+run
+plot out
+.endc
+end
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_dctranferchar_on_C_vary.png}
+\caption[Short]{DC Transfer Characteristics due to varying Capacitance}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_lab21_transfer_char.png}
+
+\caption[Short]{Transfer Characteristics}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_lab22_varing_w_n.png}
+
+\caption[Short]{For varying Width}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_pic23_tran_effect_vary_wBYL.png}
+\caption[Short]{Effect on Tran on varying W/L Ratio}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_pic24_effect_on_trans_char_Rvary.png}
+\caption[Short]{Effect on Transfer Characteristics due to varying Resistance}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_pic25_effect_on_trenchar_dueto_varyR.png}
+\caption[Short]{Effect on Transfer Characteristics due to varying Resistance}
+\end{figure}
+\clearpage
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_pic231_rise_time_due_to_WbyL_vary.png}
+\caption[Short]{Effect on Rise Time due to W/L Ratio}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_pic232_fall_time_due_to_WbyL_vary.png}
+\caption[Short]{effect on Fall Time due to W/L Ratio}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_power_dueto_varyR.png}
+\caption[Short]{Effect on Power due to varying Resistance}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_power_dueto_waring_WbyL.png}
+\caption[Short]{Effect on Power due to W/L Ratio}
+\end{figure}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab2_risefalltime_dueto_vary_Capacitance.png}
+\caption[Short]{Effect on Rise Time and Fall Time due to Varying Capacitance}
+\end{figure}
+
+\clearpage
+
+
+\section{Lab 3: Study of MOS inverter with active load NMOS and
+PMOS (pseudo NMOS load)}
+\bigskip
+\bf{Objective:} \vspace{3pt}
+For a MOS inverter with active load NMOS and PMOS (pseudo NMOS load),study
+the transfer function, noise margin, effect on rise time, fall time, propagation delay,
+power and energy consumed by a NMOS inverter with NMOS, PMOS load for
+various L,W of the pull-up and pulldown transistors and to determine the power and
+energy consumed with non-ideal step input.\\
+\vspace{5pt}
+\underline{\bf{Circuit Diagram}}\\
+\vspace{2pt}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.6]{nmos_inverter_with_enhancement_load.jpg}
+\caption[Short]{NMOS inverter with enhancement load}
+\end{figure}
+
+\bf{====Enhancement load Inverter DC transfer function====}
+\vspace{5pt}
+\begin{lstlisting}
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 vd out out 5 CMOSP l=2u w=1u
+m1 out in 0 0 CMOSN l=2u w=1u	
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 
+
+.dc vin 0 5 .001
+
+*for transfer fun pic
+.control
+run
+plot out
+end
+.endc
+
+\end{lstlisting}
+\clearpage
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_1_transfer_char_only.png}
+
+\caption[Short]{Transfer Characteristics}
+\end{figure}
+
+\bf{======Enhancement load Inverter transient response======}
+\vspace{5pt}
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 out 0 vd 5 CMOSP l=1u w=1u
+m1 out in 0 0 CMOSN l=1u w=1u
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 pulse(5 0 1u 10u 10u 2m 4m)
+
+*for transfer fun pic
+.control
+tran .01m 10m
+run
+plot out,in
+end
+.endc
+
+\end{lstlisting}
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_2_transient_response.png}
+
+\caption[Short]{Transient Response}
+\end{figure}
+
+\bf{======Transfer charactertistics due to varying width of the driver======}
+\vspace{5pt}
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 vd 0 out 5 CMOSP l=1u w=1u  *LOAD 
+m1 out in 0 0 CMOSN l=1u w=1u  *Driver
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 
+
+.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach wid 1u 2u 4u
+alter m1 w = $wid
+run 
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot dc$iter
+*plot out
+end
+.endc
+
+.control
+let x= dc1.out
+let y= dc2.out
+let z= dc3.out
+plot x,y,z
+end
+.endc
+
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_3__trans_char_dueto_varing_w_of_driver.png}
+
+\caption[Short]{Transfer Characteristics due to varying of W of the Driver}
+\end{figure}
+
+\bf{======Transient response due to varying width of the driver======}
+\vspace{5pt}
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 vd 0 out 5 CMOSP l=2u w=1u  *LOAD 
+m1 out in 0 0 CMOSN l=2u w=1u	 *Driver
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 pulse(0 5 10n 10u 10u 1m 2m)
+
+*.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach wid .5u .8u 1.5u
+alter m1 w = $wid
+tran 0.01m 5m
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot tran$iter
+end
+.endc
+
+.control
+let x= tran1.out
+let y= tran2.out
+let z= tran3.out
+plot x,y,z
+end
+.endc
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_4_transient_dueto_varing_Wof_driver.png}
+
+\caption[Short]{Transient Response after varying W/L of the Driver}
+\end{figure}
+
+\bf{===Transfer Function/Transient response due to varying length of the driver===}
+\vspace{5pt}
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 vd 0 out 5 CMOSP l=2u w=1u 
+m1 out in 0 0 CMOSN l=2u w=1u	
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 pulse(0 5 10n 10u 10u 1m 2m)
+
+*.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach len .5u 2u 4u
+alter m1 l = $len
+run
+tran 0.01m 5m
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot tran$iter
+end
+.endc
+
+.control
+let x= tran1.out
+let y= tran2.out
+let z= tran3.out
+plot x,y,z
+end
+.endc
+
+\end{lstlisting}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab_3pic3_5_transfer_fun_dueto_varing_Lof_driver.png}
+
+\caption[Short]{Transfer Function due to varying the length of the Driver}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_52_transient_dueto_varing_Lof_driver.png}
+
+\caption[Short]{Transient Response due to varying the Length of the driver}
+\end{figure}
+
+\bf{========Transfer Function due to varying width of the load========}
+\vspace{5pt}
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 vd 0 out 5 CMOSP l=1u w=1u  *LOAD 
+m1 out in 0 0 CMOSN l=1u w=1u  *Driver
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 pulse(0 5 0 0 0 .5m 1m)
+
+*.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach wid .125u .25u 2.5u
+alter m0 w = $wid
+run 
+tran 0.01m 2m
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot tran$iter
+end
+.endc
+
+.control
+let x= tran1.out
+let y= tran2.out
+let z= tran3.out
+plot x,y,z
+end
+.endc
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_6_transfer_fun_dueto_varing_Wof_load.png}
+
+\caption[Short]{Transfer Function on varying the Width of the Load}
+\end{figure}
+
+\bf{======Transient Response due to varying length of the load======}
+\vspace{5pt}
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 vd 0 out 5 CMOSP l=1u w=1u  *LOAD 
+m1 out in 0 0 CMOSN l=1u w=1u  *Driver
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 
+*pulse(0 5 0 0 0 .5m 1m)
+
+.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach len 1u 2u 5u
+alter m0 l = $len
+run 
+*tran 0.01m 2m
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot dc$iter
+end
+.endc
+
+.control
+let x= dc1.out
+let y= dc2.out
+let z= dc3.out
+plot x,y,z
+end
+.endc
+
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_6_transient_dueto_varing_Lof_load.png}
+
+\caption[Short]{Transient Response due to varying the Length of the Load}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_7_transfer_fun_dueto_varing_Lof_load.png}
+
+\caption[Short]{Transfer Characteristics due to varying the Length of the load}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab3_pic3_7_transient_duto_varing_Lof_load.png}
+
+\caption[Short]{Transient Response due to varying the length of the load}
+\end{figure}
+
+\clearpage
+
+\section{Lab 4: Study of CMOS inverter}
+\bigskip
+\centerline
+{\bf{Objective:}} 
+For a CMOS inverter,study
+the transfer function, noise margin, effect on rise time, fall time, propagation delay,
+power and energy consumed by a CMOS inverter with variation in  L,W 
+of the pull-up and pulldown transistors and to determine the power and energy consumed with non-ideal step input.
+
+\bf{========Transient Response due to varying length of the load========}
+\vspace{5pt}
+\begin{lstlisting}
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m0 vd vd out 0 CMOSN l=1u w=.3u 
+m1 out in 0 0 CMOSN l=1u w=5u	
+c1 out 0 1p
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5  
+*pulse(0 5 0 0 0 2u 4u)
+.dc vin 0 5 .01
+
+*varing W of driver
+.control
+foreach wid 1u 2u 5u
+alter m1 w = $wid
+*tran .01u 10u
+run 
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot tran$iter
+end
+.endc
+
+*ploting graph for transient out
+*.control
+*let x= tran1.out
+*let y= tran2.out
+*let z= tran3.out
+*plot x,y,z
+*end
+*.endc
+
+*ploting graph for transfer char dc out
+*.control
+*let x= dc1.out
+*let y= dc2.out
+*let z= dc3.out
+*plot x,y,z
+*end
+*.endc
+
+
+*ploting graph for power (use tran/dc for dynamic/static power)
+.control
+let x= -dc1.vdd#branch
+let y= -dc2.vdd#branch
+let z= -dc3.vdd#branch
+plot x*vd ,y*vd, z*vd
+end
+.endc
+\end{lstlisting}
+
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_1_trsnfer_fun_only.png}
+
+\caption[Short]{Transfer function of CMOS inverter}
+\end{figure}
+\bf{========Transient Response due to varying width of the load========}
+\vspace{5pt}
+\begin{lstlisting}
+*  inverter with pseudo NMOS load
+*transient response only
+
+.include /home/krunal/VLSI_LAB/t14y_tsmc_025_level3.txt
+
+m2 vd vd out 0 cmosn l=1u w=.1u
+m1 out in 0 0 cmosn l=1u w=5u
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 pulse(0 5 0 0 0 2u 4u)
+
+*for transfer fun pic
+.control
+tran .01u 10u
+run
+plot out,in
+.endc
+\end{lstlisting}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_2_transient_dueto_varing_Wof_deiver.png}
+
+\caption[Short]{Transient Response due to varying the Width of the Driver}
+\end{figure}
+\clearpage
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_2_transient_out.png}
+
+\caption[Short]{Transient output}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_3_transfer_dueto_varing_Wof_driver.png}
+
+\caption[Short]{Transfer due to varying the width of driver}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_4_2_transient_dueto_varing_Lof_driver.png}
+
+\caption[Short]{Transient Response due to varying the length of the Driver}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_4_tranfer_char_dueto_varing_Lof_driver.png}
+
+\caption[Short]{Transfer Characteristics due to varying the length of the driver}
+\end{figure}
+
+\bf{========Transient Response due to varying length of the nmos========}
+\vspace{5pt}
+\begin{lstlisting}
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+m0 vd vd out 0 CMOSN l=1u w=1u  *LOAD 
+m1 out in 0 0 CMOSN l=1u w=5u	*Driver
+
+*sources
+vdd vd 0 dc 5
+vin in 0 dc 5 pulse(0 5 0 0 0 2u 4u)
+
+*.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach len 1u .2u .4u
+alter m1 l = $len
+tran .01u 15u
+run
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot tran$iter
+end
+.endc
+
+*ploting graph for transfer char
+*.control
+*let x= dc1.out
+*let y= dc2.out
+*let z= dc3.out
+*plot x,y,z
+*end
+*.endc
+
+
+*ploting graph for transfer char
+*.control
+*let x= tran1.out
+*let y= tran2.out
+*let z= tran3.out
+*plot x,y,z
+*end
+*.endc
+
+
+*ploting graph for power
+.control
+let x= -tran1.vdd#branch
+let y= -tran2.vdd#branch
+let z= -tran3.vdd#branch
+plot x*vd, y*vd, z*vd
+end
+.endc
+\end{lstlisting}
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_5_1_transfer_fun_dueto_varing_Lof_loadnmos.png}
+
+\caption[Short]{Transfer function due to varying the length of the load - nmos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_5_2_static_power_dueto_varing_Lof_loadnmos.png}
+
+\caption[Short]{Static Power due to varying the Length of load nmos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_5_3_transient_dueto_varing_Lof_loadnmos.png}
+
+\caption[Short]{Transient Response due to varying the length of the load}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_5_4_dynamic_power_dueto_varing_Lof_loadnmos.png}
+
+\caption[Short]{Dynamic Power due to varying the Length of load nmos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_6_1_transfer_char_dueto_varing_Wof_loadnmos.png}
+
+\caption[Short]{Transient Characteristics due to varying the Width of load- nmos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_6_2_static_power_dueto_varing_Wof_loadnmos.png}
+
+\caption[Short]{Static Power due to varying W of the load nmos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_6_5_transient_dueto_varing_Wof_loadnmos.png}
+
+\caption[Short]{Transient Response due to varying the Width of the load nmos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_6_6_dynamic_power_dueto_varing_Wof_loadnmos.png}
+
+\caption[Short]{Dynamic Power due to varying the Width of the load nmos}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_10_dynamic_power_dueto_varing_Wof_driver.png}
+
+\caption[Short]{Dynamic Power due to varying the Width of the driver}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_11_static_power_dueto_varing_wof_driver.png}
+
+\caption[Short]{Static Power due to varying the Width of the Driver}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[scale=0.37]{lab4_pic4_12_dynamic_power_dueto_varing_Lof_driver.png}
+
+\caption[Short]{Dynamic Power due to varying the Length of the Driver}
+\end{figure}
+
+\clearpage
+
+\section{LAB 5: Depletion MOS and I vs V characteristics of PMOS}
+\bf{Objective:}\vspace{3pt}
+Study the behaviour of depletion MOS and PMOS transistors.\\
+\vspace{5pt}
+\bf{=========== code for depletion MOS =============}
+\begin{lstlisting}
+*include
+.include /home/Ankit/Desktop/11ec86-93/t14y_tsmc_025_level3.txt
+
+*nmos
+m1 vdd out out 0 mnmos l=1u w=.2u
+m2 out in 0 0 cmosn l=1u w=.2u
+.model mnmos nmos level=1 vto=-0.7
+
+*sources
+v_dd vdd 0 dc 3.3
+v_in in 0 dc 3.3
+
+.control
+dc v_in 0 3.3 0.01
+run
+end
+plot out 
+plot deriv(out)
+.endc
+\end{lstlisting}
+
+\vspace{20pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.35]{depletion.png}
+\caption[Short]{transient analysis and derivative for depletion MOS }
+\end{figure}
+
+\clearpage
+
+\bf{============ Code for PMOS I vs V characteristics ****************}
+\vspace{15pt}
+\begin{lstlisting}
+.include /home/Ankit/Desktop/11ec86-93/t14y_tsmc_025_level3.txt
+
+m1 drain in vdd -3.3 cmosp l=1u w=0.5u
+v_dd vdd 0 dc -3.3
+v_in in 0 dc -3.3
+v_drain drain 0 dc 0
+
+.control
+dc v_in 0 -3.3 -.01 v_dd 0 -3.3 -1
+run
+end
+plot -v_dd#branch
+.endc
+\end{lstlisting}
+
+\vspace{50pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.37]{pmos.png}
+\caption[Short]{I vs V characteristics for PMOS }
+\end{figure}
+
+
+\section{Lab 5: Study of CMOS gates}
+\bigskip
+\centerline
+{\bf{Objective:}} \vspace{5pt}
+Study
+the behaviour transfer function, noise margin, effect on rise time, fall time, propagation delay,
+power and energy consumed by a CMOS gates like NAND NOR,functions like AOI(2 input AND gate,2 input OR gate)
+with variation in  L,W of the pull-up and pulldown transistors and to determine the 
+power and energy consumed with non-ideal step input.
+Study the effect of VSB due to series connected transistors
+
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_1_pic1_transfer_fun_only.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_2_pic1_transfer_fun_dueto_varing_Wof_drivernmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \clearpage
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_2_pic4_effect on rise and fall time due to varing_Wof_nmos_driver_in_cmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_3_pic2_tansfer_char_varing_Lof_drivernmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_3_pic3_effect on rise n fall time dueto varing L of pmos(driver)_in cmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_4_pic1_transient_varing_Lof_loadpmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_4_pic2_transfer_char_varing_Lof_loadpmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_4_pic4_transfer_char_varing_Wof_loadpmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_4_pic5_effect on rise time due to varing W of pmos load.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_4_pic6 zoomed pic of effect on rise time due to vating W of pmos load.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_5_pic1effect on rise time dueto varing L of pmos load in cmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.37]{lab5_5 pic2_zoomed of (pic 1 of this lab) effect on rise time due to varing L of pmos.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+% 
+% \begin{figure}[!ht]
+% \centering
+% \includegraphics[scale=0.35]{lab5_6 pic1_effect on transfer char dueto varing load capacitors.png}
+% 
+% \caption[Short]{Dynamic Power due to varying the Length of the Driver}
+% \end{figure}
+
+\section{LAB 6: Study of CMOS gates}
+\bf{Objective :}
+study the behaviour transfer function,noise margin, rise time ,fall time, propogation delay,paower of a CMOS gates like NAND ,NOR functions (2 input AND gate ,2 input OR gate) with variations in L and W of pullup and pulldown transistors.
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.7]{Cmos_nand_gate.jpg}
+\caption[Short]{CMOS NAND gate }
+\end{figure}
+
+\vspace{20pt}
+\subsection{NAND GATE}
+\bf{=============== Code for NAND gate ==============}
+\begin{lstlisting}
+*NAND Gate Implementation
+
+.include /home/vlsilab/UG_students_2014/t14y_tsmc_025_level3.txt
+
+M1 vdd1 A top1 0 cmosn L=1U W=10U
+M2 top1 B 0 0 cmosn L=1U W=10U
+
+M3 vdd1 A v_connect v_connect cmosp L=1U W=10U 
+M4 vdd1 B v_connect v_connect  cmosp L=1U W=10U
+
+v_dd v_connect  0 3.3
+v_gs1 A 0 PULSE(0 3.3 0 0 0 8NS 16NS)
+v_gs2 B 0 PULSE(0 3.3 0 0 0 16NS 32NS)
+
+.control
+tran 0.1NS 32NS
+run
+end
+plot tran1.A tran1.B tran1.vdd1 
+.endc
+.end 
+\end{lstlisting}
+
+
+\clearpage
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.33]{NAND_Gate_00.jpeg}
+\caption[Short]{transient response for NAND gate for input a=0,b=0 }
+\end{figure}
+
+\vspace{30pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.33]{NAND_Gate_01.jpeg}
+\caption[Short]{transient response for NAND gate for input a=0,b=1 }
+\end{figure}
+
+\clearpage
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{NAND_Gate_10.jpeg}
+\caption[Short]{transient response for NAND gate for input a=1,b=0 }
+\end{figure}
+
+\subsection{AND GATE}
+\bf{*************** Code for AND gate *****************}
+\begin{lstlisting}
+ top1 A v_connect v_connect cmosp L=1U W=10U *NAND Gate Implementation
+
+.include /home/vlsilab/UG_students_2014/t14y_tsmc_025_level3.txt
+
+M1 vdd1 A top1 0 cmosn L=1U W=10U
+M2 top1 B 0 0 cmosn L=1U W=10U
+M5 stage2 vdd1 0 cmosn L=1U W=10U
+
+M3 vdd1 A v_connect v_connect cmosp L=1U W=10U 
+M4 vdd1 B v_connect v_connect  cmosp L=1U W=10U
+M6 stage2 vdd1 v_connect v_connect  cmosp L=1U W=10U
+
+v_dd v_connect  0 3.3
+v_gs1 A 0 PULSE(0 3.3 0 0 0 8NS 16NS)
+v_gs2 B 0 PULSE(0 3.3 0 0 0 16NS 32NS)
+
+.control
+tran 0.1NS 32NS
+run
+end
+plot tran1.A tran1.B tran1.vdd1  tran1.stage2
+.endc
+.end 
+\end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{AND_Gate_00.jpeg}
+\caption[Short]{transient response for AND gate for input a=0,b=0 }
+\end{figure}
+ 
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{AND_Gate_01.jpeg}
+\caption[Short]{transient response for AND gate for input a=0,b=1 }
+\end{figure}
+\clearpage
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.45]{AND_Gate_10.jpeg}
+\caption[Short]{transient response for AND gate for input a=1,b=0 }
+\end{figure}
+
+\subsection{NOR GATE}
+\bf{============= Code for NOR gate =================}
+\begin{lstlisting}
+*NOR Gate Implementation
+
+.include /home/vlsilab/UG_students_2014/t14y_tsmc_025_level3.txt
+
+M1 vdd1 A 0 0 cmosn L=1U W=10U
+M2 vdd1 B 0 0 cmosn L=1U W=10U
+
+M3 top1 A v_connect v_connect cmosp L=1U W=10U 
+M4 vdd1 B top1 top1 cmosp L=1U W=10U
+
+v_dd v_connect  0 3.3
+v_gs1 A 0 PULSE(0 3.3 0 0 0 8NS 16NS)
+v_gs2 B 0 PULSE(0 3.3 0 0 0 16NS 32NS)
+
+.control
+tran 0.1NS 32NS
+run
+end
+plot tran1.A tran1.B tran1.vdd1 
+.endc
+
+.end
+\end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.7]{cmos_nor_gate.jpg}
+\caption[Short]{CMOS OR gate }
+\end{figure}
+ 
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.5]{NOR_Gate_10.jpeg}
+\caption[Short]{transient response for NOR gate for input a=1,b=0 }
+\end{figure}
+\clearpage
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.5]{NOR_Gate_11.jpeg}
+\caption[Short]{transient response for NOR gate for input a=1,b=1 }
+\end{figure}
+
+\vspace{10pt}
+
+\subsection{OR GATE}
+
+\bf{================ Code for OR gate =================}
+\begin{lstlisting}
+*NOR Gate Implementation
+
+.include /home/vlsilab/UG_students_2014/t14y_tsmc_025_level3.txt
+
+M1 vdd1 A 0 0 cmosn L=2U W=4U
+M2 vdd1 B 0 0 cmosn L=2U W=4U
+M5 stage1 vdd1 0 0 cmosn L=2U W=4U 
+
+M3 top1 A v_c v_c cmosp L=2U W=12U 
+M4 vdd1 B top1 v_c cmosp L=2U W=12U
+M6 stage1 vdd1 v_c v_c cmosp L=2U W=12U  
+
+
+v_dd v_c  0 3.3
+v_gs1 A 0 PULSE(0 3.3 0.1p 0.1p 0.1p 4NS 8NS)
+v_gs2 B 0 PULSE(0 3.3 0.1p 0.1p 0.1p 8NS 16NS)
+
+.control
+foreach wid 12u 24u 36u 28u
+alter M3 W=$wid
+alter M4 W=$wid
+tran 0.1NS 20NS
+run
+plot A B vdd1
+end
+.endc
+.end
+\end{lstlisting}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{OR_Gate_00.jpeg}
+\caption[Short]{transient response for OR gate for input a=0,b=0 }
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.43]{OR_Gate_01.jpeg}
+\caption[Short]{transient response for OR gate for input a=0,b=1 }
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{OR_Gate_All_Combinations.jpeg}
+\caption[Short]{transient response for OR gate for all input combinations }
+\end{figure}
+
+\clearpage
+\section{MODULE-2 REPORT :: LAYOUT DESIGNING WITH MAGIC}
+
+\subsection{Layout design for CMOS inverter}
+\vspace{15pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.8]{inv_magic.jpg}
+\caption[Short]{Layout design for CMOS inveter }
+\end{figure}
+
+
+\clearpage
+
+\subsection{Layout design for CMOS 3 input NAND gate}
+\vspace{15pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{3ipnand_m.jpg}
+\caption[Short]{Layout design for CMOS 3 input NAND gate }
+\end{figure}
+
+
+\vspace{10pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.3]{3ipandsm.png}
+\caption[Short]{simulation results for CMOS 3 input NAND gate }
+\end{figure}
+
+\clearpage
+
+
+\subsection{Layout design for CMOS 3 input NOR gate}
+\vspace{15pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.4]{3ipnor_magic.jpg}
+\caption[Short]{Layout design for CMOS 3 input NOR gate }
+\end{figure}
+
+
+\vspace{30pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.25]{3ipnorsm.png}
+\caption[Short]{simulation results for CMOS 3 input NOR gate }
+\end{figure}
+
+\clearpage
+
+\subsection{Layout designs for  function ab+c using CMOS and Pseudo NMOS}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.33]{ab+ccmos.jpg}
+\caption[Short]{Layout design for ab+c CMOS design }
+\end{figure}
+
+
+\vspace{10pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.33]{ab+c_pseudo.jpg}
+\caption[Short]{Layout design for ab+c pseudo NMOS }
+\end{figure}
+
+\clearpage
+
+\vspace{10pt}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.33]{ab_csm.png}
+\caption[Short]{Simulation  for ab+c pseudo NMOS }
+\end{figure}
+
+\clearpage
+
+\subsection{Layout design for D - Latch}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=.5]{dlatch.jpg}
+\caption[Short]{Layout design for D - Latch }
+\end{figure}
+
+ 
+\end{center}
+%%%%%%%%%%%%%%%%%%%%%%%%
+%% References section: %
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%% End of document %%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+

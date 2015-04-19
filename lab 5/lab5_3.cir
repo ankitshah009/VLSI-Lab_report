@@ -1,0 +1,55 @@
+
+*  CMOS inverter 
+*tranfer_char/transient response/power for varing L of nmos 
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+m0 out in vd 5 CMOSP l=1u w=.8u  *LOAD 
+m1 out in 0 0 CMOSN l=2u w=.2u	 *Driver
+
+*sources
+vdd vd 0 dc 5
+vin in 0 dc 5 pulse(5 0 .01m .1m .1m .5m 1m)
+
+*.dc vin 0 5 .01
+
+*varing W/L ratio
+
+.control
+foreach len .12u 2u 10u
+alter m1 l = $len
+tran .001m 1m
+run
+end
+.endc
+
+
+*plotting the output for various w of load
+
+.control
+foreach iter 1 2 3
+setplot tran$iter
+*setplot dc$iter
+end
+.endc
+
+*ploting graph for transfer char
+
+.control
+let x= tran1.out
+let y= tran2.out
+let z= tran3.out
+plot x,y,z
+end
+.endc
+
+*ploting graph for power
+
+*.control
+*let x= -tran1.vdd#branch
+*let y= -tran2.vdd#branch
+*let z= -tran3.vdd#branch
+*plot x*vd, y*vd, z*vd
+*end
+*.endc
+

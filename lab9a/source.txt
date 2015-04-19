@@ -1,0 +1,17 @@
+
+.include /home/yaduvanshi/Desktop/spice/New/lab9/nand1.spice
+.include /home/yaduvanshi/Desktop/spice/t14y_tsmc_025_level3.txt
+
+*sources
+v_dd vdd 0 3.3 
+v_ss vss 0 0
+v_a a 0 3.3 pulse(0 3.3 .1n 1n 1n 200n 400n)
+v_b b 0 3.3 pulse(0 3.3 .1n 1n 1n 400n 800n)
+
+*responce
+.control
+tran .1n 1600n
+run
+plot out a b
+.endc
+

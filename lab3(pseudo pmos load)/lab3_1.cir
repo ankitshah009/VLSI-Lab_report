@@ -1,0 +1,23 @@
+
+*  inverter with Pmos load (pseudo nmos)
+*tranfer fun only
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+m0 vd out out 5 CMOSP l=2u w=1u
+m1 out in 0 0 CMOSN l=2u w=1u
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5 
+
+.dc vin 0 5 .001
+
+*for transfer fun pic
+.control
+run
+plot out
+end
+.endc
+
+

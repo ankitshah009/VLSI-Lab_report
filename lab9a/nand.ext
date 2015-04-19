@@ -1,0 +1,24 @@
+timestamp 1398186171
+version 7.5
+tech scmos
+style lambda=1.0(scna20_orb)
+scale 1000 1 100
+resistclasses 26670 59550 23860 19690 27260 2000000 49 26 2505830
+node "s2d1n" 47 0 3 -5 ndiff 28 22 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+node "vss" 34 9400 -4 -5 ndc 20 18 0 0 0 0 0 0 0 0 0 0 216 80 0 0 0 0
+node "d1d2p" 127 4512 3 16 pdiff 20 18 77 36 0 0 0 0 0 0 0 0 136 76 0 0 0 0
+equiv "d1d2p" "out"
+node "pmos2" 429 6266 10 -7 p 0 0 0 0 88 84 0 0 0 0 0 0 16 16 0 0 0 0
+equiv "pmos2" "nmos2"
+equiv "pmos2" "b"
+node "pmos1" 429 6266 -3 8 pc 0 0 0 0 88 84 0 0 0 0 0 0 16 16 0 0 0 0
+equiv "pmos1" "nmos1"
+equiv "pmos1" "a"
+node "vdd" 2960 4935 -4 16 nw 16 16 110 64 0 0 0 0 0 0 0 0 325 128 0 0 441 84
+cap "pmos2" "d1d2p" 240
+cap "vdd" "pmos2" 956
+cap "vdd" "pmos1" 956
+device mosfet nfet 10 -5 11 -4 2 4 "Gnd!" "pmos2" 4 0 "s2d1n" 4 0 "d1d2p" 4 0
+device mosfet nfet 1 -5 2 -4 2 4 "Gnd!" "pmos1" 4 0 "vss" 4 0 "s2d1n" 4 0
+device mosfet pfet 10 16 11 17 2 11 "vdd" "pmos2" 4 0 "d1d2p" 11 0 "vdd" 11 0
+device mosfet pfet 1 16 2 17 2 11 "vdd" "pmos1" 4 0 "vdd" 11 0 "d1d2p" 11 0

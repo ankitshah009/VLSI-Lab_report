@@ -1,0 +1,16 @@
+* SPICE3 file created from nor.ext - technology: scmos
+
+*.option scale=1u
+
+M1000 d1s2p a vdd vdd cmosp w=10u l=2u
++ ad=70p pd=34u as=50p ps=30u
+M1001 out1 b d1s2p vdd cmosp w=10u l=2u
++ ad=54p pd=32u as=0 ps=0 
+M1002 out1 a vss Gnd cmosn w=4u l=2u
++ ad=28p pd=22u as=40p ps=36u 
+M1003 vss b out1 Gnd cmosn w=4u l=2u
++ ad=0 pd=0 as=0 ps=0 
+C0 vss 0 6.8fF
+C1 out1 0 2.2fF
+C2 b 0 4.3fF
+C3 a 0 4.3fF

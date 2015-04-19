@@ -1,0 +1,24 @@
+
+*  CMOS inverter *tranfer fun 
+
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+m0 out in vd vd CMOSP l=1u w=2u  *LOAD 
+m1 out in 0 0 CMOSN l=1u w=2u	 *Driver
+
+*sources
+vdd vd 0 dc 5
+vin in 0 dc 5
+* pulse(5 0 1n 1n 1n 2u 4u)
+
+.dc vin 0 5 .01
+
+*output graph
+.control
+*tran .01u 10u
+run
+plot out,in
+.endc
+
+
