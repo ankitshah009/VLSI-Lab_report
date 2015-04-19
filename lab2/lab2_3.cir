@@ -1,0 +1,34 @@
+
+
+
+
+* nmos inverter resistiv load
+
+*Effect on transient responce due to varing (W/L) 
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+r1 vd out 0.1k
+m1 out in 0 0 CMOSN l=1u w=1u
+
+*sources
+vdd vd 0 dc 3.3 
+vin in 0 dc 3.3 pulse(0 3.3 1n .1n .1n 2n 4n)
+
+*varing W/L ratio
+.control
+foreach wid .12u .25u 2.5u
+alter m1 w = $wid
+tran .01n 10n
+run 
+end
+.endc
+
+*plotting the output for various w/L
+.control
+foreach iter 1 2 3
+setplot tran$iter
+plot out
+end
+.endc
+

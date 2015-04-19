@@ -1,0 +1,33 @@
+
+* nmos inverter resistiv load
+
+* Effect on transient responce due to varing R
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+r1 vd out 1k
+m1 out in 0 0 CMOSN l=1u w=1u
+
+*sources
+vdd vd 0 dc 3.3 
+vin in 0 dc 3.3 pulse(0 3.3 1n .1n .1n 2n 4n)
+
+
+*varing R resistant
+
+.control
+foreach resi 3k 10k 100k
+alter r1 = $resi
+tran .01n 10n
+run
+end
+.endc
+
+*plotting the output for various w/L (or resistant)
+
+.control
+foreach iter 1 2 3
+setplot tran$iter
+plot out
+end
+.endc
+

@@ -1,0 +1,21 @@
+
+
+* nmos inverter resistiv_load DC transfer function only
+
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+r1 vd out 0.1k
+m1 out in 0 0 CMOSN l=1u w=1u
+
+*sources
+vdd vd 0 dc 3.3 
+vin in 0 dc 3.3
+
+.dc vin 0 6 .01
+
+* for transfer fun pic
+.control
+run
+plot out
+.endc
+end

@@ -1,0 +1,25 @@
+*nmos characteristics with pmos load
+
+.include /home/vlsilab/UG_students_2014/t14y_tsmc_025_level3.txt
+
+M1 vdd1 in1 0 0 cmosn L=1U W=10U
+M2 vdd2 vdd1 0 0 cmosn L=1U W=10U
+M3 vdd3 vdd2 0 0 cmosn L=1U W=10U 
+
+M4 vdd1 in1 v_connect v_connect cmosp L=1U W=10U 
+M5 vdd2 vdd1 v_connect v_connect cmosp L=1U W=10U
+M6 vdd3 vdd2 v_connect v_connect cmosp L=1U W=10U
+
+v_dd  v_connect  0 3.3
+v_gs in1 0 PULSE(0 3.3 0 0 0 500NS 1000NS)
+
+
+.control
+foreach width 2U 4U 8U
+alter M5 W = $width
+tran 0.1NS 2000NS
+run
+end
+plot tran1.vdd2 tran2.vdd1 tran2.vdd2 tran3.vdd1 tran3.vdd2
+.endc
+.end

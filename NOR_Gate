@@ -1,0 +1,22 @@
+*NOR Gate Implementation
+
+.include /home/vlsilab/UG_students_2014/t14y_tsmc_025_level3.txt
+
+M1 vdd1 A 0 0 cmosn L=1U W=10U
+M2 vdd1 B 0 0 cmosn L=1U W=10U
+
+M3 top1 A v_connect v_connect cmosp L=1U W=10U 
+M4 vdd1 B top1 top1 cmosp L=1U W=10U
+
+v_dd v_connect  0 3.3
+v_gs1 A 0 PULSE(0 3.3 0 0 0 8NS 16NS)
+v_gs2 B 0 PULSE(0 3.3 0 0 0 16NS 32NS)
+
+.control
+tran 0.1NS 32NS
+run
+end
+plot tran1.A tran1.B tran1.vdd1 
+.endc
+
+.end

@@ -1,0 +1,36 @@
+
+* nmos inverter resistiv load
+
+*effect on tranfer_fun due to varing load capacitance
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+r1 vd out 0.1k
+m1 out in 0 0 CMOSN l=1u w=1u
+c1 out 0 1n
+
+*sources
+vdd vd 0 dc 3.3 
+vin in 0 dc 3.3 
+
+.dc vin 0 6 .01
+
+
+
+*varing capacitance 
+
+.control
+foreach cap 1p 1n 1u
+alter c1 = $cap
+run 
+end
+.endc
+
+*plotting the output for various cap
+
+.control
+foreach iter 1 2 3
+setplot dc$iter
+plot out
+end
+.endc
+
