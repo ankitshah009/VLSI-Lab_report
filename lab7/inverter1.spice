@@ -1,0 +1,33 @@
+* SPICE3 file created from inverter1.ext - technology: scmos
+
+*.option scale=1u
+
+.include /home/yaduvanshi/Desktop/spice/t14y_tsmc_025_level3.txt
+
+M1000 out1 input vdd Vdd cmosp w=5u l=2u
++ ad=25p pd=20u as=25p ps=20u 
+M1001 out1 input vss Gnd cmosn w=5u l=2u
+
+v_dd vdd 0 dc 3.3
+v_in input 0 dc 3.3 pulse(0 3.3 0.1n 1n 1n 50n 100n)
+v_ss vss 0 dc 0
+
+.control
+tran .01n 200n
+run
+end
+plot out1 input
+.endc
+
+
+
+
+
+
+
+
++ ad=25p pd=20u as=25p ps=20u 
+C0 vss 0 2.8fF
+C1 out 0 2.3fF
+C2 vdd 0 2.8fF
+C3 input 0 6.3fF

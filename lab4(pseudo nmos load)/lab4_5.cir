@@ -1,0 +1,62 @@
+
+*  inverter with NMOS load
+*tranfer fun for varing L of load nmos
+
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+m0 vd vd out 0 CMOSN l=1u w=1u  *LOAD 
+m1 out in 0 0 CMOSN l=1u w=5u	 *Driver
+
+*sources
+vdd vd 0 dc 5
+vin in 0 dc 5 pulse(0 5 0 0 0 2u 4u)
+
+*.dc vin 0 5 .01
+
+*varing W/L ratio
+.control
+foreach len 1u 2u 4u
+alter m0 l = $len
+tran .01u 15u
+run
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot tran$iter
+end
+.endc
+
+*ploting graph for transfer char
+.control
+*let x= dc1.out
+*let y= dc2.out
+*let z= dc3.out
+*plot x,y,z
+*end
+*.endc
+
+
+*ploting graph for transfer char
+*.control
+*let x= tran1.out
+*let y= tran2.out
+*let z= tran3.out
+*plot x,y,z
+*end
+*.endc
+
+
+*ploting graph for power
+.control
+let x= -tran1.vdd#branch
+let y= -tran2.vdd#branch
+let z= -tran3.vdd#branch
+plot x*vd, y*vd, z*vd
+end
+.endc
+

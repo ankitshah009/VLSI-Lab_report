@@ -1,0 +1,31 @@
+
+*.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+*.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3_1.txt
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level1.txt
+
+.model my_nmos nmos LEVEL=1 VTO=.03
+m0 out in Vss 0 my_nmos
+
+*sources
+Vgnd Vss 0 dc 0
+vdd out 0 dc 5
+
+*input_source
+Vin in 0 dc 5
+.dc Vin 0 5 .1
+
+.control
+foreach res 0.5 2 3
+altermod m0 VTO= $res
+
+run
+end
+.endc
+
+.control
+foreach iter 1 2 3
+setplot dc$iter
+plot -vdd#branch
+end
+.endc

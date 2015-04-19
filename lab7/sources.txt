@@ -1,0 +1,13 @@
+.include /home/yaduvanshi/Desktop/spice/New Folder/lab7/inverter1.spice
+.include /home/yaduvanshi/Desktop/spice/t14y_tsmc_025_level3.txt
+
+v_dd vdd 0 dc 3.3
+v_in input 0 dc 3.3 pulse(0 3.3 0.1n 1n 1n 50n 100n)
+v_ss vss 0 dc 0
+
+.control
+tran .01n 200n
+run
+end
+plot out1 input
+.endc

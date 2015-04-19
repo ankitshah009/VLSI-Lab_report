@@ -1,0 +1,14 @@
+timestamp 1395295684
+version 7.5
+tech scmos
+style lambda=1.0(scna20_orb)
+scale 1000 1 100
+resistclasses 26670 59550 23860 19690 27260 2000000 49 26 2505830
+node "vss" 27 3572 6 -3 ndc 25 20 0 0 0 0 0 0 0 0 0 0 96 56 0 0 0 0
+node "out" 86 2256 17 -3 ndiff 25 20 25 20 0 0 0 0 0 0 0 0 88 52 0 0 0 0
+node "vdd" 60 3384 6 14 pdc 0 0 25 20 0 0 0 0 0 0 0 0 92 54 0 0 0 0
+node "load" 134 10764 6 7 pc 0 0 0 0 176 74 0 0 0 0 0 0 20 18 0 0 0 0
+equiv "load" "driver"
+equiv "load" "input"
+device mosfet nfet 11 -3 12 -2 6 5 "Gnd!" "load" 12 0 "vss" 5 0 "out" 5 0
+device mosfet pfet 11 14 12 15 6 5 "Vdd!" "load" 12 0 "vdd" 5 0 "out" 5 0

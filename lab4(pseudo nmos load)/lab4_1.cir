@@ -1,0 +1,63 @@
+
+*  inverter with pseudo NMOS load
+*tranfer_fun/transient responce/power for varing W of driver nmos
+
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level3.txt
+
+m0 vd vd out 0 CMOSN l=1u w=.3u 
+m1 out in 0 0 CMOSN l=1u w=5u	
+c1 out 0 1p
+
+*sources
+vdd vd 0 dc 5 
+vin in 0 dc 5  
+*pulse(0 5 0 0 0 2u 4u)
+.dc vin 0 5 .01
+
+*varing W of driver
+.control
+foreach wid 1u 2u 5u
+alter m1 w = $wid
+*tran .01u 10u
+run 
+end
+.endc
+
+
+*plotting the output for various w of load
+.control
+foreach iter 1 2 3
+setplot tran$iter
+end
+.endc
+
+*ploting graph for transient out
+*.control
+*let x= tran1.out
+*let y= tran2.out
+*let z= tran3.out
+*plot x,y,z
+*end
+*.endc
+
+*ploting graph for transfer char dc out
+*.control
+*let x= dc1.out
+*let y= dc2.out
+*let z= dc3.out
+*plot x,y,z
+*end
+*.endc
+
+
+*ploting graph for power (use tran/dc for dynamic/static power)
+.control
+let x= -dc1.vdd#branch
+let y= -dc2.vdd#branch
+let z= -dc3.vdd#branch
+plot x*vd ,y*vd, z*vd
+end
+.endc
+
+

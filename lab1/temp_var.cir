@@ -1,0 +1,20 @@
+
+.include /home/krunal/VLSI_LAB/VINAY/t14y_tsmc_025_level1.txt
+
+m0 out in Vss 0 RITSUBN1 TEMP=27
+
+*sources
+Vgng Vss 0 dc 0
+vdd out 0 dc 5
+Vin in 0  dc  5
+
+.dc Vin 0 5 .1
+.control
+foreach t1 27 50 100
+alter m0 TEMP =$t1
+run
+end 
+.endc
+ 
+
+
